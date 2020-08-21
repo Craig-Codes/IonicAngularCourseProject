@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <!-- <ion-button (click)="onOpenMenu()">Open</ion-button> ... if want to open menu programatically -->
+    </ion-buttons>
+    <ion-title>Discover Places</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <ion-segment value="all" (ionChange)="onFilterUpdate($event)">
+    <!-- value is passed with click event to indicate which button was clicked -->
+    <ion-segment-button value="all">All Places</ion-segment-button>
+    <ion-segment-button value="bookable">Bookable Places</ion-segment-button>
+  </ion-segment>
+  <ion-grid *ngIf="relevantPlaces.length <= 0 || !relevantPlaces">
+    <ion-row>
+      <ion-col size="12" size-sm="8" offset-sm="2" class="ion-text-center">
+        <p>There are no bookable places right now, please come back later.</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="relevantPlaces.length > 0">
+    <ion-row>
+      <ion-col size="12" size-sm="8" offset-sm="2" class="ion-text-center">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{ relevantPlaces[0].title }}</ion-card-title>
+            <ion-card-subtitle
+              >{{ relevantPlaces[0].price | currency}} /
+              Night</ion-card-subtitle
+            >
+          </ion-card-header>
+          <ion-img [src]="relevantPlaces[0].imageUrl"></ion-img>
+          <ion-card-content>
+            <p>
+              <ion-text color="secondary"
+                >{{ relevantPlaces[0]. description }}</ion-text
+              >
+            </p>
+          </ion-card-content>
+          <div class="ion-text-right">
+            <ion-button
+              fill="clear"
+              color="primary"
+              routerDirection="forward"
+              [routerLink]="['/', 'places', 'tabs', 'discover', relevantPlaces[0].id]"
+              >More</ion-button
+            >
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" size-sm="8" offset-sm="2" text-center>
+        <ion-card>
+          <ion-virtual-scroll
+            [items]="listedLoadedPlaces"
+            approxItemHeight="100px"
+          >
+            <!-- virtual scroll replaces ion-list to only render list items on screen, or very close to the screen, to help performance. NgFor can no longer be used - bind items property instead -->
+            <ion-item
+              [routerLink]="['/', 'places', 'tabs', 'discover', place.id]"
+              detail
+              *virtualItem="let place"
+            >
+              <!-- virtualItem and the varaible after let allows you to use the array item, from items again-->
+              <ion-thumbnail slot="start">
+                <!-- ion-thumbnail is a square image, ion-avatar is a cirlce image. ion-img loads lazily so really good! use for optimisations-->
+                <ion-img [src]="place.imageUrl"></ion-img>
+              </ion-thumbnail>
+              <ion-label>
+                <h2>{{ place.title }}</h2>
+                <p>{{ place.description }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-virtual-scroll>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
