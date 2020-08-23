@@ -15,12 +15,21 @@ export class OffersPage implements OnInit, OnDestroy {
   // store places subscription so it can be destroyed to avoid memory leak
   private placesSub: Subscription;
 
+  isLoading = false;
+
   constructor(private placesService: PlacesService, private router: Router) {}
 
   ngOnInit() {
     // whenever our list of places changes we are informed
     this.placesSub = this.placesService.places.subscribe((places) => {
       this.offers = places;
+    });
+  }
+
+  ionViewWillEnter() {
+    this.isLoading = true;
+    this.placesService.fetchPlaces().subscribe(() => {
+      this.isLoading = false;
     });
   }
 

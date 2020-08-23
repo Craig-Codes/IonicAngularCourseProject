@@ -21,6 +21,7 @@ import { AuthService } from "src/app/auth/auth.service";
 export class PlaceDetailPage implements OnInit, OnDestroy {
   place: Place;
   isBookable = false;
+  isLoading = false;
 
   private placeSub: Subscription;
 
@@ -41,11 +42,13 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack("/places/tabs/discover");
         return;
       }
+      this.isLoading = true;
       this.placeSub = this.placesService
         .getPlace(paramMap.get("placeId"))
         .subscribe((place) => {
           this.place = place;
           this.isBookable = place.userId !== this.AuthService.userId; // if we crreated the place we cannot book! This will be false
+          this.isLoading = false;
         });
     });
   }
