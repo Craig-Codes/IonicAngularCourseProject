@@ -6,7 +6,7 @@ import { Injectable } from "@angular/core";
 export class AuthService {
   private _userIsAuthenticated = true; // make this private so can only be changed from login in or logout method
   // Ensures this varaibel can not be overwritten from elsewhere in the application
-  private _userId = "abc";
+  private _userId = "abd";
 
   constructor() {}
 
