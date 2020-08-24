@@ -1,0 +1,14 @@
+/* Map transition added to cover up the map loading in and create a nice effect */
+
+.map {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  opacity: 0;
+  transition: opactiy 150ms ease-in;
+}
+
+.map.visible {
+  opacity: 1;
+}

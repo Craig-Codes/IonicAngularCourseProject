@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { PlacesService } from "../../places.service";
 import { Router } from "@angular/router";
 import { LoadingController } from "@ionic/angular";
+import { PlaceLocation } from "../../location.model";
 
 @Component({
   selector: "app-new-offer",
@@ -43,6 +44,9 @@ export class NewOfferPage implements OnInit {
         updateOn: "blur",
         validators: [Validators.required],
       }),
+      location: new FormControl(null, {
+        validators: [Validators.required],
+      }),
     }); // Form createdm but needs synchronised to HTML code - usinf directives
   }
 
@@ -64,7 +68,8 @@ export class NewOfferPage implements OnInit {
             this.form.value.description,
             +this.form.value.price,
             new Date(this.form.value.dateFrom),
-            new Date(this.form.value.dateTo)
+            new Date(this.form.value.dateTo),
+            this.form.value.location
           )
           .subscribe(() => {
             loadingEl.dismiss(); // dismisses the spinner
@@ -72,5 +77,12 @@ export class NewOfferPage implements OnInit {
             this.router.navigate(["/places/tabs/offers"]);
           });
       });
+  }
+
+  onLocationPicked(location: PlaceLocation) {
+    // update form to hold location data
+    this.form.patchValue({
+      location: location,
+    });
   }
 }
